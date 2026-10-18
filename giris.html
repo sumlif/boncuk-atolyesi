@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Giriş · Boncuk Atölyesi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#fbfaf7;--card:#fff;--ink:#1b2030;--muted:#5d6577;--hair:#d8dce5;--soft:#f1f0ec;--accent:#d4442c;--ok:#2f7f45;--blue:#2f6fd1;
+  --f-d:"Bricolage Grotesque",system-ui,sans-serif;--f-b:"Figtree",system-ui,sans-serif;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--paper);color:var(--ink);font:16px/1.5 var(--f-b);display:flex;flex-direction:column}
+.bar{border-bottom:1px solid var(--hair)}
+.bar a{display:flex;align-items:center;gap:10px;max-width:1120px;margin:0 auto;padding:16px;text-decoration:none;color:inherit;font:700 20px var(--f-d)}
+.mark{width:24px;height:24px;border-radius:50%;border:7px solid var(--accent)}
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 16px}
+.card{width:min(440px,100%);background:var(--card);border:2px solid var(--ink);border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:16px}
+h1{font:800 30px/1.1 var(--f-d);letter-spacing:-.02em;margin:0}
+.tabs{display:flex;border:2px solid var(--ink);border-radius:999px;overflow:hidden}
+.tabs button{flex:1;border:0;background:transparent;padding:9px;font:600 15px var(--f-b);cursor:pointer;color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--ink);color:#fff}
+form{display:flex;flex-direction:column;gap:12px}
+label{display:flex;flex-direction:column;gap:5px;font-size:14px;font-weight:600}
+label small{font-weight:400;color:var(--muted)}
+input{font:inherit;padding:10px 12px;min-height:44px;border:1.5px solid var(--hair);border-radius:10px;background:#fff;color:var(--ink)}
+input:focus-visible,button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.btn{min-height:46px;border-radius:999px;border:2px solid var(--accent);background:var(--accent);color:#fff;font:700 16px var(--f-b);cursor:pointer}
+.btn:disabled{opacity:.5;cursor:default}
+.msg{margin:0;padding:10px 12px;border-radius:10px;font-size:14px;background:var(--soft)}
+.msg.err{color:var(--accent)}.msg.ok{color:var(--ok)}
+.note{margin:0;color:var(--muted);font-size:13px}
+.state{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+.state svg{width:84px;height:84px}
+.link{background:none;border:0;padding:0;color:var(--ink);text-decoration:underline;font:inherit;cursor:pointer}
+</style>
+</head>
+<body>
+<header class="bar"><a href="./"><span class="mark" aria-hidden="true"></span>Boncuk Atölyesi</a></header>
+<main>
+  <div class="card" id="card">
+    <h1 id="title">Hoş geldiniz</h1>
+    <div class="tabs" role="tablist">
+      <button role="tab" id="tLogin" aria-selected="true">Giriş yap</button>
+      <button role="tab" id="tSign" aria-selected="false">Kayıt ol</button>
+    </div>
+
+    <form id="fLogin" novalidate>
+      <label>Kullanıcı adı<input id="lUser" autocomplete="username" autocapitalize="none" required></label>
+      <label>Şifre<input id="lPass" type="password" autocomplete="current-password" required></label>
+      <button class="btn" id="lBtn">Giriş yap</button>
+    </form>
+
+    <form id="fSign" novalidate hidden>
+      <label>Ad soyad<input id="sName" autocomplete="name" required></label>
+      <label>Kullanıcı adı <small>3–24 karakter; küçük harf, rakam, nokta, tire</small><input id="sUser" autocomplete="username" autocapitalize="none" required></label>
+      <label>E-posta <small>Onay haberini buradan alırsınız</small><input id="sMail" type="email" autocomplete="email" required></label>
+      <label>Şifre <small>En az 8 karakter</small><input id="sPass" type="password" autocomplete="new-password" minlength="8" required></label>
+      <button class="btn" id="sBtn">Kayıt ol</button>
+      <p class="note">Kaydınız yönetici onayından sonra açılır.</p>
+    </form>
+
+    <p class="msg" id="msg" hidden aria-live="polite"></p>
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="auth.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const say=(t,k="")=>{const m=$("msg");m.hidden=!t;m.textContent=t||"";m.className="msg "+k};
+function tab(sign){$("tLogin").setAttribute("aria-selected",!sign);$("tSign").setAttribute("aria-selected",sign);$("fLogin").hidden=sign;$("fSign").hidden=!sign;say("")}
+$("tLogin").onclick=()=>tab(false);$("tSign").onclick=()=>tab(true);
+if(location.hash==="#kayit")tab(true);
+
+const WAIT=`<svg viewBox="0 0 84 84" aria-hidden="true"><circle cx="42" cy="42" r="38" fill="#fff7d1" stroke="#1b2030" stroke-width="3"/><path d="M42 20v24l14 9" stroke="#1b2030" stroke-width="4" fill="none" stroke-linecap="round"/></svg>`;
+const NO=`<svg viewBox="0 0 84 84" aria-hidden="true"><circle cx="42" cy="42" r="38" fill="#fde5e1" stroke="#1b2030" stroke-width="3"/><path d="M28 28l28 28M56 28L28 56" stroke="#d4442c" stroke-width="5" stroke-linecap="round"/></svg>`;
+function stateCard(icon,title,text){
+  $("card").innerHTML=`<div class="state">${icon}<h1>${title}</h1><p class="note" style="font-size:15px">${text}</p><button class="link" id="out">Çıkış yap</button></div>`;
+  $("out").onclick=async()=>{await baClient.auth.signOut();location.reload()};
+}
+function route(p){
+  if(!p||!p.profile){stateCard(WAIT,"Profil hazırlanıyor","Birkaç saniye sonra sayfayı yenileyin.");return}
+  if(p.profile.status==="approved"){const next=new URLSearchParams(location.search).get("next");location.replace(next==="admin"?"admin.html":"app.html");return}
+  if(p.profile.status==="rejected"){stateCard(NO,"Kayıt onaylanmadı","Bu hesap için erişim verilmedi. Bir yanlışlık olduğunu düşünüyorsanız yöneticiyle iletişime geçin.");return}
+  stateCard(WAIT,"Onay bekleniyor",`Merhaba <b>${p.profile.username}</b>, kaydınız alındı. Yönetici onayladığında uygulamayı açabileceksiniz.`);
+}
+$("fLogin").onsubmit=async e=>{e.preventDefault();const u=$("lUser").value,pw=$("lPass").value;
+  if(!u||!pw){say("Kullanıcı adı ve şifre gerekli.","err");return}
+  $("lBtn").disabled=true;say("Giriş yapılıyor…");
+  const {error}=await baClient.auth.signInWithPassword({email:baLoginEmail(u),password:pw});
+  $("lBtn").disabled=false;
+  if(error){say("Kullanıcı adı veya şifre hatalı.","err");return}
+  route(await baCurrent());
+};
+$("fSign").onsubmit=async e=>{e.preventDefault();
+  const name=$("sName").value.trim(),u=$("sUser").value.trim().toLowerCase(),mail=$("sMail").value.trim(),pw=$("sPass").value;
+  if(!name){say("Ad soyad gerekli.","err");return}
+  if(!baUserOk(u)){say("Kullanıcı adı 3–24 karakter olmalı; küçük harf, rakam, nokta veya tire kullanın.","err");return}
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail)){say("Geçerli bir e-posta yazın.","err");return}
+  if(pw.length<8){say("Şifre en az 8 karakter olmalı.","err");return}
+  $("sBtn").disabled=true;say("Kontrol ediliyor…");
+  const {data:free}=await baClient.rpc("username_free",{u});
+  if(free===false){$("sBtn").disabled=false;say("Bu kullanıcı adı alınmış, başka bir tane deneyin.","err");return}
+  const {data,error}=await baClient.auth.signUp({email:baLoginEmail(u),password:pw,options:{data:{full_name:name,contact_email:mail}}});
+  $("sBtn").disabled=false;
+  if(error){say(/registered|exists/i.test(error.message)?"Bu kullanıcı adı alınmış.":"Kayıt yapılamadı: "+error.message,"err");return}
+  if(!data.session){say("Kaydınız alındı. Yönetici onayından sonra giriş yapabilirsiniz.","ok");tab(false);return}
+  route(await baCurrent());
+};
+baCurrent().then(p=>{if(p)route(p)});
+</script>
+</body>
+</html>
