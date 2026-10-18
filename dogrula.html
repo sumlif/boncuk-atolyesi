@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>E-posta doğrulama · Boncuk Atölyesi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#fbfaf7;--card:#fff;--ink:#1b2030;--muted:#5d6577;--hair:#d8dce5;--accent:#d4442c;--ok:#2f7f45;--blue:#2f6fd1;
+  --f-d:"Bricolage Grotesque",system-ui,sans-serif;--f-b:"Figtree",system-ui,sans-serif;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--paper);color:var(--ink);font:16px/1.5 var(--f-b);display:flex;flex-direction:column}
+.bar{border-bottom:1px solid var(--hair)}
+.bar a{display:flex;align-items:center;gap:10px;max-width:1120px;margin:0 auto;padding:16px;text-decoration:none;color:inherit;font:700 20px var(--f-d)}
+.mark{width:24px;height:24px;border-radius:50%;border:7px solid var(--accent)}
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 16px}
+.card{width:min(440px,100%);background:var(--card);border:2px solid var(--ink);border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:14px;align-items:flex-start}
+.card svg{width:84px;height:84px}
+h1{font:800 28px/1.1 var(--f-d);letter-spacing:-.02em;margin:0}
+p{margin:0;color:var(--muted)}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 22px;border-radius:999px;background:var(--accent);color:#fff;font:700 16px var(--f-b);text-decoration:none}
+.btn:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+</style>
+</head>
+<body>
+<header class="bar"><a href="./"><span class="mark" aria-hidden="true"></span>Boncuk Atölyesi</a></header>
+<main><div class="card" id="card" aria-live="polite"><h1>Doğrulanıyor…</h1><p>Lütfen bekleyin.</p></div></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="auth.js?v=6"></script>
+<script>
+const OK=`<svg viewBox="0 0 84 84" aria-hidden="true"><circle cx="42" cy="42" r="38" fill="#e3f4e8" stroke="#1b2030" stroke-width="3"/><path d="M26 43l11 11 21-24" stroke="#2f7f45" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const NO=`<svg viewBox="0 0 84 84" aria-hidden="true"><circle cx="42" cy="42" r="38" fill="#fde5e1" stroke="#1b2030" stroke-width="3"/><path d="M28 28l28 28M56 28L28 56" stroke="#d4442c" stroke-width="5" stroke-linecap="round"/></svg>`;
+function show(icon,title,text,btn){const c=document.getElementById("card");c.innerHTML=icon+"<h1></h1><p></p>"+(btn?`<a class="btn" href="app.html">${btn}</a>`:"");c.querySelector("h1").textContent=title;c.querySelector("p").textContent=text}
+(async()=>{
+  const t=new URLSearchParams(location.search).get("t")||"";
+  if(!/^[0-9a-f-]{36}$/i.test(t)){show(NO,"Bağlantı geçersiz","Bağlantı eksik ya da bozuk görünüyor. Maildeki bağlantının tamamını açtığınızdan emin olun.","Uygulamaya git");return}
+  try{
+    const {data,error}=await baClient.rpc("verify_email",{t});
+    if(error)throw error;
+    if(data==="ok")show(OK,"E-postanız doğrulandı","Teşekkürler. Hesabınız artık süresiz kullanılabilir.","Uygulamaya git");
+    else if(data==="already")show(OK,"Zaten doğrulanmış","Bu e-posta adresi daha önce doğrulanmış.","Uygulamaya git");
+    else show(NO,"Bağlantı geçersiz","Bu bağlantının süresi dolmuş olabilir. Uygulamaya girip yeni doğrulama maili isteyin.","Uygulamaya git");
+  }catch(e){show(NO,"Bağlantı kurulamadı","Lütfen biraz sonra sayfayı yenileyin.")}
+})();
+</script>
+</body>
+</html>

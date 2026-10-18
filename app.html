@@ -1,5 +1,5 @@
 <!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<style>html.ba-lock body>*:not(#baGate){visibility:hidden}#baGate{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;font:600 15px Figtree,system-ui,sans-serif;color:#5d6577;background:#eceef3;z-index:99}html:not(.ba-lock) #baGate{display:none}header.top .brand{order:0}header.top .ba-card{order:1}header.top .opts{order:2;flex-basis:100%}.ba-card{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:5px 6px 5px 5px;margin-left:auto}.ba-av{width:34px;height:34px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;font:700 15px Figtree,system-ui,sans-serif;flex:none}.ba-who{display:flex;flex-direction:column;line-height:1.15;min-width:0}.ba-who b{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px}.ba-who small{font-size:12px;color:var(--muted)}.ba-card a,.ba-card button{font:600 13px Figtree,system-ui,sans-serif;color:var(--ink);background:var(--soft);border:1px solid var(--line);border-radius:999px;padding:7px 12px;cursor:pointer;text-decoration:none;min-height:34px}.ba-card button.out{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}</style>
+<style>html.ba-lock body>*:not(#baGate){visibility:hidden}#baGate{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;font:600 15px Figtree,system-ui,sans-serif;color:#5d6577;background:#eceef3;z-index:99}html:not(.ba-lock) #baGate{display:none}header.top .brand{order:0}header.top .ba-card{order:1}header.top .opts{order:2;flex-basis:100%}.ba-card{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:5px 6px 5px 5px;margin-left:auto}.ba-av{width:34px;height:34px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;font:700 15px Figtree,system-ui,sans-serif;flex:none}.ba-who{display:flex;flex-direction:column;line-height:1.15;min-width:0}.ba-who b{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px}.ba-who small{font-size:12px;color:var(--muted)}.ba-card a,.ba-card button{font:600 13px Figtree,system-ui,sans-serif;color:var(--ink);background:var(--soft);border:1px solid var(--line);border-radius:999px;padding:7px 12px;cursor:pointer;text-decoration:none;min-height:34px}.ba-card button.out{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}.ba-vbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;background:#fff7d1;border:1px solid #e9c46a;color:#1b2030;border-radius:12px;padding:10px 14px;font-size:14px}.ba-vbar span{flex:1 1 280px}.ba-vbar button{font:600 13px Figtree,system-ui,sans-serif;background:#1b2030;color:#fff;border:0;border-radius:999px;padding:8px 14px;min-height:36px;cursor:pointer}.ba-vbar small{flex-basis:100%;color:#5d6577}#baGate.ba-vlock{align-items:flex-start;overflow:auto;padding:32px 16px;background:#fbfaf7;color:#1b2030}.ba-vcard{margin:auto;width:min(460px,100%);background:#fff;border:2px solid #1b2030;border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:12px;font:400 15px/1.5 Figtree,system-ui,sans-serif}.ba-vcard h1{font:800 28px/1.1 "Bricolage Grotesque",system-ui,sans-serif;margin:0}.ba-vcard p{margin:0;color:#5d6577}.ba-vcard p b{color:#1b2030;overflow-wrap:anywhere}.ba-vrow{display:flex;flex-wrap:wrap;gap:8px}.ba-vcard button{font:600 15px Figtree,system-ui,sans-serif;min-height:44px;padding:0 18px;border-radius:999px;border:2px solid #1b2030;background:#fff;color:#1b2030;cursor:pointer}.ba-vcard button.pri{background:#d4442c;border-color:#d4442c;color:#fff}.ba-vcard button.lnk{border:0;padding:0;min-height:0;text-decoration:underline;align-self:flex-start;background:none}.ba-vcard summary{cursor:pointer;font-weight:600}.ba-vcard form{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.ba-vcard input{flex:1 1 200px;font:inherit;min-height:44px;padding:0 12px;border:1.5px solid #d8dce5;border-radius:10px}.ba-vout:empty{display:none}.ba-vout{background:#f1f0ec;border-radius:10px;padding:10px 12px;color:#1b2030!important}</style>
 <script>document.documentElement.classList.add("ba-lock")</script>
 <div id="baGate">Oturum kontrol ediliyor…</div>
 <title>Boncuk Atölyesi</title>
@@ -363,8 +363,45 @@ progress{width:100%;height:8px;accent-color:var(--accent)}
 <div class="toast" id="toast" hidden></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="auth.js?v=5"></script>
+<script src="auth.js?v=6"></script>
 <script>
+const BA_RES={sent:"Doğrulama maili gönderildi. Gelen kutunuzu (ve spam klasörünü) kontrol edin.",wait:"Az önce gönderildi. 2 dakika sonra tekrar deneyebilirsiniz.",nokey:"Mail servisi henüz hazır değil. Lütfen yöneticiye haber verin.",bad:"Geçerli bir e-posta yazın.",verified:"E-postanız zaten doğrulanmış. Sayfayı yenileyin.",noemail:"Bu hesapta e-posta adresi yok."};
+async function baResend(out,btn){btn.disabled=true;out.textContent="Gönderiliyor…";const {data,error}=await baClient.rpc("resend_verification");out.textContent=error?"Gönderilemedi: "+error.message:(BA_RES[data]||data);setTimeout(()=>btn.disabled=false,4000)}
+function baVerifyBanner(pr,deadline){
+  const bar=document.createElement("div");bar.className="ba-vbar";bar.setAttribute("role","status");
+  const txt=document.createElement("span"),btn=document.createElement("button"),out=document.createElement("small");
+  btn.type="button";btn.textContent="Maili tekrar gönder";btn.onclick=()=>baResend(out,btn);
+  const tick=()=>{const ms=deadline-Date.now();if(ms<=0){location.reload();return}
+    const h=Math.floor(ms/3600e3),m=Math.floor(ms%3600e3/60e3);
+    txt.innerHTML="";const b=document.createElement("b");b.textContent="E-postanızı doğrulayın.";
+    txt.append(b," ",`${pr.email} adresine gönderilen bağlantıya tıklayın. Kalan süre: ${h} sa ${m} dk, sonra uygulama kilitlenir.`)};
+  tick();setInterval(tick,30000);
+  bar.append(txt,btn,out);document.querySelector(".wrap").prepend(bar);
+}
+function baVerifyLock(pr){
+  const g=document.getElementById("baGate");g.className="ba-vlock";g.innerHTML=`
+   <div class="ba-vcard">
+    <svg viewBox="0 0 84 84" width="72" height="72" aria-hidden="true"><rect x="16" y="36" width="52" height="38" rx="8" fill="#fff7d1" stroke="#1b2030" stroke-width="3"/><path d="M28 36V26a14 14 0 0 1 28 0v10" fill="none" stroke="#1b2030" stroke-width="3"/><circle cx="42" cy="55" r="5" fill="#d4442c"/></svg>
+    <h1>E-postanızı doğrulayın</h1>
+    <p>Kayıttan bu yana 12 saat geçti. Uygulamayı kullanmaya devam etmek için <b id="vMail"></b> adresine gönderdiğimiz bağlantıya tıklayın.</p>
+    <div class="ba-vrow"><button type="button" class="pri" id="vRe">Maili tekrar gönder</button><button type="button" id="vDone">Doğruladım, yenile</button></div>
+    <details><summary>E-posta adresim yanlış</summary>
+      <form id="vForm"><input type="email" id="vNew" placeholder="doğru e-posta adresiniz" autocomplete="email" required><button type="submit">Düzelt ve gönder</button></form>
+    </details>
+    <p class="ba-vout" id="vOut" aria-live="polite"></p>
+    <button type="button" class="lnk" id="vOutBtn">Çıkış yap</button>
+   </div>`;
+  document.getElementById("vMail").textContent=pr.email;
+  const out=document.getElementById("vOut");
+  document.getElementById("vRe").onclick=e=>baResend(out,e.target);
+  document.getElementById("vDone").onclick=()=>location.reload();
+  document.getElementById("vOutBtn").onclick=()=>baLogout("giris.html");
+  document.getElementById("vForm").onsubmit=async e=>{e.preventDefault();out.textContent="Gönderiliyor…";
+    const v=document.getElementById("vNew").value;const {data,error}=await baClient.rpc("change_contact_email",{new_email:v});
+    if(error){out.textContent="Kaydedilemedi: "+error.message;return}
+    if(data==="sent")document.getElementById("vMail").textContent=v.trim().toLowerCase();
+    out.textContent=BA_RES[data]||data};
+}
 (async()=>{
   try{
     const p=await baCurrent();
@@ -376,6 +413,11 @@ progress{width:100%;height:8px;accent-color:var(--accent)}
     who.append(b,sm);u.append(av,who);
     if(pr.is_admin){const a=document.createElement("a");a.href="admin.html";a.textContent="Yönetim";u.appendChild(a)}
     const o=document.createElement("button");o.className="out";o.type="button";o.textContent="Çıkış yap";o.onclick=()=>{o.disabled=true;o.textContent="Çıkılıyor…";baLogout("giris.html")};u.appendChild(o);
+    if(!pr.email_verified_at){
+      const deadline=new Date(pr.created_at).getTime()+12*3600e3;
+      if(Date.now()>=deadline){baVerifyLock(pr);return}
+      baVerifyBanner(pr,deadline);
+    }
     document.documentElement.classList.remove("ba-lock");window.dispatchEvent(new Event("resize"));
   }catch(e){document.getElementById("baGate").textContent="Bağlantı kurulamadı. Sayfayı yenileyin."}
 })();

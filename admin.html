@@ -55,7 +55,7 @@ h1{font:800 32px/1.1 var(--f-d);letter-spacing:-.02em;margin:0}
 </main>
 <div class="toast" id="toast" hidden></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="auth.js?v=5"></script>
+<script src="auth.js?v=6"></script>
 <script>
 const $=id=>document.getElementById(id);
 let rows=[],filter="pending",meId=null;
@@ -96,6 +96,7 @@ function render(){
     const t=document.createElement("span");t.className="tag "+r.status;t.textContent=LBL[r.status];
     who.className="who";who.append(b,t);
     if(r.is_admin){const a=document.createElement("span");a.className="tag admin";a.textContent="Yönetici";who.append(a)}
+    {const v=document.createElement("span");v.className="tag "+(r.email_verified_at?"approved":"pending");v.textContent=r.email_verified_at?"E-posta doğrulandı":"E-posta doğrulanmadı";who.append(v)}
     const u=document.createElement("div");u.className="u";u.textContent="@"+r.username;who.append(u);
     const meta=document.createElement("div");meta.className="meta";
     meta.textContent=[r.email&&!r.email.endsWith("@"+BA_CFG.domain)?r.email:"",`Kayıt: ${dt(r.created_at)}`,r.approved_at?`Onay: ${dt(r.approved_at)}`:""].filter(Boolean).join(" · ");

@@ -55,7 +55,7 @@ input:focus-visible,button:focus-visible{outline:3px solid var(--blue);outline-o
     <form id="fSign" novalidate hidden>
       <label>Ad soyad<input id="sName" autocomplete="name" required></label>
       <label>Kullanıcı adı <small>3–24 karakter; küçük harf, rakam, nokta, tire</small><input id="sUser" autocomplete="username" autocapitalize="none" required></label>
-      <label>E-posta <small>Onay haberini buradan alırsınız</small><input id="sMail" type="email" autocomplete="email" required></label>
+      <label>E-posta <small>Gerçek adresiniz olmalı; doğrulama bağlantısı gönderilir</small><input id="sMail" type="email" autocomplete="email" required></label>
       <label>Şifre <small>En az 8 karakter</small><input id="sPass" type="password" autocomplete="new-password" minlength="8" required></label>
       <button class="btn" id="sBtn">Kayıt ol</button>
       <p class="note">Kaydınız yönetici onayından sonra açılır.</p>
@@ -65,7 +65,7 @@ input:focus-visible,button:focus-visible{outline:3px solid var(--blue);outline-o
   </div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="auth.js?v=5"></script>
+<script src="auth.js?v=6"></script>
 <script>
 const $=id=>document.getElementById(id);
 const say=(t,k="")=>{const m=$("msg");m.hidden=!t;m.textContent=t||"";m.className="msg "+k};
@@ -83,7 +83,7 @@ function route(p){
   if(!p||!p.profile){stateCard(WAIT,"Profil hazırlanıyor","Birkaç saniye sonra sayfayı yenileyin.");return}
   if(p.profile.status==="approved"){const next=new URLSearchParams(location.search).get("next");location.replace(next==="admin"?"admin.html":"app.html");return}
   if(p.profile.status==="rejected"){stateCard(NO,"Kayıt onaylanmadı","Bu hesap için erişim verilmedi. Bir yanlışlık olduğunu düşünüyorsanız yöneticiyle iletişime geçin.");return}
-  stateCard(WAIT,"Onay bekleniyor",`Merhaba <b>${p.profile.username}</b>, kaydınız alındı. Yönetici onayladığında uygulamayı açabileceksiniz.`);
+  stateCard(WAIT,"Onay bekleniyor",`Merhaba <b>${p.profile.username}</b>, kaydınız alındı. Yönetici onayladığında uygulamayı açabileceksiniz.${p.profile.email_verified_at?"":" Bu arada <b>"+(p.profile.email||"").replace(/[<>&]/g,"")+"</b> adresine gönderdiğimiz bağlantıyla e-postanızı doğrulayın."}`);
 }
 $("fLogin").onsubmit=async e=>{e.preventDefault();const u=$("lUser").value,pw=$("lPass").value;
   if(!u||!pw){say("Kullanıcı adı ve şifre gerekli.","err");return}
@@ -105,7 +105,7 @@ $("fSign").onsubmit=async e=>{e.preventDefault();
   const {data,error}=await baClient.auth.signUp({email:baLoginEmail(u),password:pw,options:{data:{full_name:name,contact_email:mail}}});
   $("sBtn").disabled=false;
   if(error){say(/registered|exists/i.test(error.message)?"Bu kullanıcı adı alınmış.":"Kayıt yapılamadı: "+error.message,"err");return}
-  if(!data.session){say("Kaydınız alındı. Yönetici onayından sonra giriş yapabilirsiniz.","ok");tab(false);return}
+  if(!data.session){say("Kaydınız alındı. E-posta adresinize bir doğrulama bağlantısı gönderdik. Yönetici onayından sonra giriş yapabilirsiniz.","ok");tab(false);return}
   route(await baCurrent());
 };
 baCurrent().then(p=>{if(p)route(p)});
