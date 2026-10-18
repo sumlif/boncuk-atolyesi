@@ -7,7 +7,8 @@ window.BA_CFG = {
 window.baClient = window.supabase.createClient(BA_CFG.url, BA_CFG.key, {
   auth: { persistSession: true, autoRefreshToken: true, storageKey: "boncuk-auth" }
 });
-window.baLoginEmail = u => `${String(u).trim().toLowerCase()}@${BA_CFG.domain}`;
+window.baUserName = u => String(u).trim().toLowerCase().split("@")[0];
+window.baLoginEmail = u => `${baUserName(u)}@${BA_CFG.domain}`;
 window.baUserOk = u => /^[a-z0-9][a-z0-9._-]{2,23}$/.test(String(u).trim().toLowerCase());
 // Oturum ve profil: {session, profile} ya da null
 window.baCurrent = async () => {
