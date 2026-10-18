@@ -1,5 +1,5 @@
 <!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<style>html.ba-lock body>*:not(#baGate){visibility:hidden}#baGate{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;font:600 15px Figtree,system-ui,sans-serif;color:#5d6577;background:#eceef3;z-index:99}html:not(.ba-lock) #baGate{display:none}.ba-user{display:inline-flex;align-items:center;gap:6px;font-size:13px}.ba-user a,.ba-user button{font:inherit;color:inherit;background:none;border:1px solid var(--line);border-radius:999px;padding:5px 10px;cursor:pointer;text-decoration:none}</style>
+<style>html.ba-lock body>*:not(#baGate){visibility:hidden}#baGate{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;font:600 15px Figtree,system-ui,sans-serif;color:#5d6577;background:#eceef3;z-index:99}html:not(.ba-lock) #baGate{display:none}header.top .brand{order:0}header.top .ba-card{order:1}header.top .opts{order:2;flex-basis:100%}.ba-card{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:5px 6px 5px 5px;margin-left:auto}.ba-av{width:34px;height:34px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;font:700 15px Figtree,system-ui,sans-serif;flex:none}.ba-who{display:flex;flex-direction:column;line-height:1.15;min-width:0}.ba-who b{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px}.ba-who small{font-size:12px;color:var(--muted)}.ba-card a,.ba-card button{font:600 13px Figtree,system-ui,sans-serif;color:var(--ink);background:var(--soft);border:1px solid var(--line);border-radius:999px;padding:7px 12px;cursor:pointer;text-decoration:none;min-height:34px}.ba-card button.out{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}</style>
 <script>document.documentElement.classList.add("ba-lock")</script>
 <div id="baGate">Oturum kontrol ediliyor…</div>
 <title>Boncuk Atölyesi</title>
@@ -163,13 +163,13 @@ progress{width:100%;height:8px;accent-color:var(--accent)}
         <select id="cols" aria-label="Yan yana tabla sayısı"></select>×<select id="rows" aria-label="Alt alta tabla sayısı"></select>
       </span>
       <span class="info" id="dimInfo"></span>
-      <span class="ba-user" id="baUser"></span>
       <div class="seg" role="group" aria-label="Görünüm">
         <button id="vBead" aria-pressed="true">Boncuk</button>
         <button id="vPix" aria-pressed="false">Piksel</button>
       </div>
       <label class="chk" for="guides"><input type="checkbox" id="guides" checked> 5'li kılavuz</label>
     </div>
+    <div class="ba-card" id="baUser" aria-label="Oturum"></div>
   </header>
 
   <div class="app">
@@ -363,16 +363,19 @@ progress{width:100%;height:8px;accent-color:var(--accent)}
 <div class="toast" id="toast" hidden></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="auth.js?v=3"></script>
+<script src="auth.js?v=5"></script>
 <script>
 (async()=>{
   try{
     const p=await baCurrent();
     if(!p||!p.profile||p.profile.status!=="approved"){location.replace("giris.html");return}
-    const u=document.getElementById("baUser");
-    const n=document.createElement("span");n.textContent="@"+p.profile.username;u.appendChild(n);
-    if(p.profile.is_admin){const a=document.createElement("a");a.href="admin.html";a.textContent="Yönetim";u.appendChild(a)}
-    const o=document.createElement("button");o.textContent="Çıkış";o.onclick=async()=>{await baClient.auth.signOut();location.href="./"};u.appendChild(o);
+    const u=document.getElementById("baUser"),pr=p.profile,nm=(pr.full_name||pr.username);
+    const av=document.createElement("span");av.className="ba-av";av.textContent=nm.trim().charAt(0).toLocaleUpperCase("tr-TR");
+    const who=document.createElement("span");who.className="ba-who";
+    const b=document.createElement("b");b.textContent=nm;const sm=document.createElement("small");sm.textContent="@"+pr.username+" · "+(pr.is_admin?"Yönetici":"Kullanıcı");
+    who.append(b,sm);u.append(av,who);
+    if(pr.is_admin){const a=document.createElement("a");a.href="admin.html";a.textContent="Yönetim";u.appendChild(a)}
+    const o=document.createElement("button");o.className="out";o.type="button";o.textContent="Çıkış yap";o.onclick=()=>{o.disabled=true;o.textContent="Çıkılıyor…";baLogout("giris.html")};u.appendChild(o);
     document.documentElement.classList.remove("ba-lock");window.dispatchEvent(new Event("resize"));
   }catch(e){document.getElementById("baGate").textContent="Bağlantı kurulamadı. Sayfayı yenileyin."}
 })();

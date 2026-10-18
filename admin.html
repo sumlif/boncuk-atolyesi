@@ -55,14 +55,14 @@ h1{font:800 32px/1.1 var(--f-d);letter-spacing:-.02em;margin:0}
 </main>
 <div class="toast" id="toast" hidden></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="auth.js?v=3"></script>
+<script src="auth.js?v=5"></script>
 <script>
 const $=id=>document.getElementById(id);
 let rows=[],filter="pending",meId=null;
 const LBL={pending:"Bekliyor",approved:"Onaylı",rejected:"Reddedildi"};
 function toast(t){const e=$("toast");e.textContent=t;e.hidden=false;clearTimeout(e._t);e._t=setTimeout(()=>e.hidden=true,2600)}
 const dt=s=>s?new Date(s).toLocaleString("tr-TR",{dateStyle:"medium",timeStyle:"short"}):"";
-$("out").onclick=async()=>{await baClient.auth.signOut();location.href="giris.html"};
+$("out").onclick=()=>baLogout("giris.html");
 
 async function boot(){
   const p=await baCurrent();

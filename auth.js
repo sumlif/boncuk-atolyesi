@@ -17,3 +17,9 @@ window.baCurrent = async () => {
   const { data: profile } = await baClient.from("profiles").select("*").eq("id", session.user.id).maybeSingle();
   return { session, profile };
 };
+// Çıkış: sunucu yanıt vermese bile yerel oturumu kesin siler
+window.baLogout = async (to = "giris.html") => {
+  try { await Promise.race([baClient.auth.signOut({ scope: "local" }), new Promise(r => setTimeout(r, 2500))]); } catch (e) {}
+  try { Object.keys(localStorage).filter(k => k.startsWith("boncuk-auth") || /^sb-.*-auth-token/.test(k)).forEach(k => localStorage.removeItem(k)); } catch (e) {}
+  location.replace(to);
+};
